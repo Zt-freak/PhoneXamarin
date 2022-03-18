@@ -1,5 +1,6 @@
 ﻿using PhoneXamarin.Client.Models;
 using PhoneXamarin.Client.Views;
+using PhoneXamarin.Service;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,20 +11,20 @@ namespace PhoneXamarin.Client.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
+        private Phone _selectedItem;
 
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<Phone> Phones { get; }
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
+        public Command<Phone> ItemTapped { get; }
 
         public ItemsViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
+            Phones = new ObservableCollection<Phone>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            ItemTapped = new Command<Item>(OnItemSelected);
+            ItemTapped = new Command<Phone>(OnItemSelected);
 
             AddItemCommand = new Command(OnAddItem);
         }
@@ -34,11 +35,11 @@ namespace PhoneXamarin.Client.ViewModels
 
             try
             {
-                Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
-                foreach (var item in items)
+                Phones.Clear();
+                var phones = await PhoneService.GetAll();
+                foreach (var phone in phones)
                 {
-                    Items.Add(item);
+                    Phones.Add(phone);
                 }
             }
             catch (Exception ex)
@@ -57,7 +58,7 @@ namespace PhoneXamarin.Client.ViewModels
             SelectedItem = null;
         }
 
-        public Item SelectedItem
+        public Phone SelectedItem
         {
             get => _selectedItem;
             set
@@ -72,13 +73,13 @@ namespace PhoneXamarin.Client.ViewModels
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(Item item)
+        async void OnItemSelected(Phone phone)
         {
-            if (item == null)
+            if (phone == null)
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={phone.Id}");
         }
     }
 }

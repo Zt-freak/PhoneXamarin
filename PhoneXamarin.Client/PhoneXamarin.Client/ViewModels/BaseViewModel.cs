@@ -12,6 +12,7 @@ namespace PhoneXamarin.Client.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
+        public IPhoneService PhoneService => DependencyService.Get<IPhoneService>();
         public IAuthService AuthService => DependencyService.Get<IAuthService>();
 
 

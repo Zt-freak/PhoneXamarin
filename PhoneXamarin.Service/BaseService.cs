@@ -1,8 +1,11 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace PhoneXamarin.Service
 {
@@ -11,23 +14,28 @@ namespace PhoneXamarin.Service
         private string _baseAddress = DeviceInfo.Platform == DevicePlatform.Android
                     ? "https://10.0.2.2:5001/api/"
                     : "https://localhost:44396/api/";
-        //private string _baseAddress = "https://localhost:44396";
-        public async Task<T> GetAsync<T>(string path)
+        private string _token = string.Empty;
+
+        public async Task<HttpResponseMessage> GetAsync(string path)
         {
-            return await ExecuteCall<T>(path);
+            return await ExecuteCall(path);
         }
 
-        public async Task<T> PostAsync<T>(string apiPath, object content)
+        public async Task<HttpResponseMessage> PostAsync(string apiPath, object content)
         {
-            return await ExecuteCall<T>(apiPath, content);
+            return await ExecuteCall(apiPath, content);
         }
 
-        private async Task<T> ExecuteCall<T>(string apiPath, object content = null)
+        private async Task<HttpResponseMessage> ExecuteCall(string apiPath, object content = null)
         {
             try
             {
                 using (var client = new HttpClient(GetInsecureHandler()))
                 {
+                    if (Application.Current.Properties.ContainsKey("token"))
+                    {
+                        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", Application.Current.Properties["token"].ToString());
+                    }
                     HttpResponseMessage response;
 
                     if (content == null)
@@ -36,7 +44,7 @@ namespace PhoneXamarin.Service
                     }
                     else
                     {
-                        string serialized = Newtonsoft.Json.JsonConvert.SerializeObject(content);
+                        string serialized = JsonConvert.SerializeObject(content);
                         StringContent stringContent = new StringContent(serialized, Encoding.UTF8, "application/json");
 
                         response = await client.PostAsync($"{_baseAddress}{apiPath}", stringContent);
@@ -44,10 +52,7 @@ namespace PhoneXamarin.Service
 
                     if (response.IsSuccessStatusCode)
                     {
-                        var responseString = await response.Content.ReadAsStringAsync();
-                        var result = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(responseString);
-
-                        return result;
+                        return response;
                     }
                     else
                     {

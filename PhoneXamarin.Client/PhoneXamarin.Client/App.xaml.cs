@@ -16,6 +16,7 @@ namespace PhoneXamarin.Client
 
             DependencyService.Register<MockDataStore>();
             DependencyService.Register<AuthService>();
+            DependencyService.Register<PhoneService>();
             if (Current.Properties.ContainsKey("token"))
             {
                 AuthService auth = new AuthService();

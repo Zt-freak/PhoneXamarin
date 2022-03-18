@@ -4,7 +4,7 @@
              x:Class="PhoneXamarin.Client.Views.ItemsPage"
              Title="{Binding Title}"
              xmlns:local="clr-namespace:PhoneXamarin.Client.ViewModels"  
-             xmlns:model="clr-namespace:PhoneXamarin.Client.Models"  
+             xmlns:model="clr-namespace:PhoneXamarin.Client.Models" xmlns:model1="clr-namespace:PhoneXamarin.Service;assembly=PhoneXamarin.Service"
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
@@ -16,12 +16,12 @@
     -->
     <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
         <CollectionView x:Name="ItemsListView"
-                ItemsSource="{Binding Items}"
+                ItemsSource="{Binding Phones}"
                 SelectionMode="None">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Padding="10" x:DataType="model:Item">
-                        <Label Text="{Binding Text}" 
+                    <StackLayout Padding="10" x:DataType="model1:Phone">
+                        <Label Text="{Binding Type}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
                             FontSize="16" />
