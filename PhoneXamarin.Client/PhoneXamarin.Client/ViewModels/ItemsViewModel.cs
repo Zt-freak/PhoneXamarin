@@ -2,6 +2,7 @@
 using PhoneXamarin.Client.Views;
 using PhoneXamarin.Service;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -36,7 +37,7 @@ namespace PhoneXamarin.Client.ViewModels
             try
             {
                 Phones.Clear();
-                var phones = await PhoneService.GetAll();
+                IEnumerable<Phone> phones = await PhoneService.GetAll();
                 foreach (var phone in phones)
                 {
                     Phones.Add(phone);

@@ -8,5 +8,6 @@ namespace PhoneXamarin.Service
     public interface IPhoneService
     {
         Task<IEnumerable<Phone>> GetAll();
+        Task<Phone> GetById(int id);
     }
 }

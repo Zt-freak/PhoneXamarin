@@ -16,7 +16,7 @@ namespace PhoneXamarin.Service
             HttpResponseMessage response = await PostAsync("login", new
             {
                 Username = username,
-                Password = password,
+                Password = password
             });
 
             string responseString = await response.Content.ReadAsStringAsync();
@@ -24,6 +24,22 @@ namespace PhoneXamarin.Service
 
             return result;
         }
+
+        public async Task<TokenModel> Register(string username, string password, string email)
+        {
+            HttpResponseMessage response = await PostAsync("register", new
+            {
+                Username = username,
+                Password = password,
+                Email = email
+            });
+
+            string responseString = await response.Content.ReadAsStringAsync();
+            TokenModel result = JsonConvert.DeserializeObject<TokenModel>(responseString);
+
+            return result;
+        }
+
         public async Task<bool> ValidateToken(string token)
         {
             HttpResponseMessage response = await GetAsync("validate");

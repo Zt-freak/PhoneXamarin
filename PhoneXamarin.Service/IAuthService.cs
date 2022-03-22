@@ -9,5 +9,6 @@ namespace PhoneXamarin.Service
     {
         string Jwt { get; set; }
         Task<TokenModel> Login(string username, string password);
+        Task<TokenModel> Register(string username, string password, string email);
     }
 }

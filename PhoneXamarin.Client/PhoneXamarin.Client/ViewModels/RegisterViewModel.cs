@@ -4,15 +4,16 @@ using Xamarin.Forms;
 
 namespace PhoneXamarin.Client.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class RegisterViewModel : BaseViewModel
     {
-        public Command LoginCommand { get; }
+        public Command RegisterCommand { get; }
         private string _username;
         private string _password;
+        private string _email;
 
-        public LoginViewModel()
+        public RegisterViewModel()
         {
-            LoginCommand = new Command(OnLoginClicked);
+            RegisterCommand = new Command(OnRegisterClicked);
         }
 
         public string Username
@@ -26,10 +27,15 @@ namespace PhoneXamarin.Client.ViewModels
             get => _password;
             set => SetProperty(ref _password, value);
         }
-
-        private async void OnLoginClicked(object obj)
+        public string Email
         {
-            TokenModel tokenInformation = await AuthService.Login(Username, Password);
+            get => _email;
+            set => SetProperty(ref _email, value);
+        }
+
+        private async void OnRegisterClicked(object obj)
+        {
+            TokenModel tokenInformation = await AuthService.Register(Username, Password, Email);
             Application.Current.Properties["token"] = tokenInformation.Token;
 
             // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one

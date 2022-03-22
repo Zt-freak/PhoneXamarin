@@ -13,7 +13,19 @@ namespace PhoneXamarin.Service
         {
             HttpResponseMessage response =  await GetAsync("phone/all");
             string responseString = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<List<Phone>>(responseString);
+            return JsonConvert.DeserializeObject<PhoneListModel>(responseString).Results;
         }
+
+        public async Task<Phone> GetById(int id)
+        {
+            HttpResponseMessage response = await GetAsync($"phone/{id}");
+            string responseString = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<Phone>(responseString);
+        }
+    }
+
+    public class PhoneListModel
+    {
+        public List<Phone> Results { get; set; }
     }
 }

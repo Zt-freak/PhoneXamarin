@@ -1,4 +1,5 @@
 ﻿using PhoneXamarin.Client.Models;
+using PhoneXamarin.Service;
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -43,9 +44,9 @@ namespace PhoneXamarin.Client.ViewModels
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Text = item.Text;
+                Phone item = await PhoneService.GetById(int.Parse(itemId));
+                Id = item.Id.ToString();
+                Text = item.Type;
                 Description = item.Description;
             }
             catch (Exception)
