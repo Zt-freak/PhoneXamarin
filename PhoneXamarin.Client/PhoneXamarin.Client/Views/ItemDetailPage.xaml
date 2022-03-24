@@ -5,10 +5,12 @@
              Title="{Binding Title}">
 
     <StackLayout Spacing="20" Padding="15">
+        <Image Source="image.png" HeightRequest="64" HorizontalOptions="Start" />
         <Label Text="Text:" FontSize="Medium" />
         <Label Text="{Binding Text}" FontSize="Small"/>
         <Label Text="Description:" FontSize="Medium" />
         <Label Text="{Binding Description}" FontSize="Small"/>
+        <Button Text="Order" Command="{Binding OrderCommand}"/>
     </StackLayout>
     
 </ContentPage>

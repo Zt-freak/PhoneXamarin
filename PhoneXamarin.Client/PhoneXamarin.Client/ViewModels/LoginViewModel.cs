@@ -1,5 +1,6 @@
 ﻿using PhoneXamarin.Client.Views;
 using PhoneXamarin.Service;
+using System;
 using Xamarin.Forms;
 
 namespace PhoneXamarin.Client.ViewModels
@@ -29,12 +30,20 @@ namespace PhoneXamarin.Client.ViewModels
 
         private async void OnLoginClicked(object obj)
         {
-            TokenModel tokenInformation = await AuthService.Login(Username, Password);
-            Application.Current.Properties["token"] = tokenInformation.Token;
+            try
+            {
+                TokenModel tokenInformation = await AuthService.Login(Username, Password);
+                Application.Current.Properties["token"] = tokenInformation.Token;
+                Application.Current.Properties["id"] = tokenInformation.Id;
 
-            // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
-            Application.Current.MainPage = new AppShell();
-            await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+                // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
+                Application.Current.MainPage = new AppShell();
+                await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
+            }
+            catch(Exception)
+            {
+                await Application.Current.MainPage.DisplayAlert("Alert", "Something went wrong.", "OK");
+            }
         }
     }
 }

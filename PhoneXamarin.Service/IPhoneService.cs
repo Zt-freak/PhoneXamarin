@@ -9,5 +9,6 @@ namespace PhoneXamarin.Service
     {
         Task<IEnumerable<Phone>> GetAll();
         Task<Phone> GetById(int id);
+        void OrderPhone(Order order, Phone phone);
     }
 }

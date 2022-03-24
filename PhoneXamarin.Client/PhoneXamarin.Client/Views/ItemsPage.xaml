@@ -21,6 +21,7 @@
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <StackLayout Padding="10" x:DataType="model1:Phone">
+                        <Image Source="image.png" HeightRequest="64" HorizontalOptions="Start" />
                         <Label Text="{Binding Type}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 

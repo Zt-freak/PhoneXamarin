@@ -22,6 +22,18 @@ namespace PhoneXamarin.Service
             string responseString = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<Phone>(responseString);
         }
+
+        public async void OrderPhone(Order order, Phone phone)
+        {
+            HttpResponseMessage response = await PostAsync($"order", order);
+            string responseString = await response.Content.ReadAsStringAsync();
+            Order submittedOrder = JsonConvert.DeserializeObject<Order>(responseString);
+            response = await PostAsync($"order/add", new
+            {
+                OrderId = submittedOrder.Id,
+                ProductId = phone.Id
+            });
+        }
     }
 
     public class PhoneListModel

@@ -10,6 +10,9 @@ namespace PhoneXamarin.Client.ViewModels
     [QueryProperty(nameof(ItemId), nameof(ItemId))]
     public class ItemDetailViewModel : BaseViewModel
     {
+        public Command OrderCommand { get; }
+
+        private Phone item;
         private string itemId;
         private string text;
         private string description;
@@ -40,11 +43,17 @@ namespace PhoneXamarin.Client.ViewModels
             }
         }
 
+        public ItemDetailViewModel()
+        {
+            OrderCommand = new Command(OnItemSelected);
+
+        }
+
         public async void LoadItemId(string itemId)
         {
             try
             {
-                Phone item = await PhoneService.GetById(int.Parse(itemId));
+                item = await PhoneService.GetById(int.Parse(itemId));
                 Id = item.Id.ToString();
                 Text = item.Type;
                 Description = item.Description;
@@ -53,6 +62,16 @@ namespace PhoneXamarin.Client.ViewModels
             {
                 Debug.WriteLine("Failed to Load Item");
             }
+        }
+
+        async void OnItemSelected(object obj)
+        {
+            Order newOrder = new Order()
+            {
+                CustomerId = int.Parse(Application.Current.Properties["id"].ToString())
+            };
+            PhoneService.OrderPhone(newOrder, item);
+            await Application.Current.MainPage.DisplayAlert("Alert", "Your order has been placed", "OK");
         }
     }
 }
